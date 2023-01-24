@@ -1,29 +1,16 @@
 const express = require("express");
 const morgan = require("morgan");
+const productRouter = require("./routers/productRouter");
 const app = express();
-app.use(express.json());
+app.use(express.json());// req => body
 app.use(morgan('dev'));
 
 app.use((req, res, next) => {
-    //guardar en los logs la peticion
+    req.requestTime = new Date().toISOString();
     next();
 });
 
-app.get("/api/test", (req, res) => {
-    console.log(req.body);
-    res.status(200).json({
-        peticion: "GET",
-        ruta: "/api/test"
-    });
-});
-
-app.get("/api/test2", (req, res) => {
-    console.log(req.body);
-    res.status(200).json({
-        peticion: "GET",
-        ruta: "/api/test"
-    });
-});
+app.use("/api/v1/product/", productRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`App running on port ${process.env.PORT}`);
