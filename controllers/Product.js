@@ -1,6 +1,6 @@
 const Product = require("../modelsT/ProductModel");
 const getAllProducts = async(req, res) => {
-    const products = await Product.find();
+    const products = await Product.findOne();
     res.status(200).json({
         status: "ok",
         data: products,
