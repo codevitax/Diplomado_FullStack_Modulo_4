@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const Product = require("./models/Product")
+const Product = require("./modelsT/ProductModel")
 const productRouter = require("./routers/productRouter");
 const dataSource = require("./dataSource");
 const app = express();
@@ -30,8 +30,10 @@ mongoose.connect(process.env.DB_URL, {}).then(async (con) => {
 
 dataSource
     .initialize()
-    .then(() => {
-        console.log("connected to mysql from typeorm")
+    .then(async() => {
+        console.log("connected to mysql from typeorm");
+        const allProducts = await Product.find();
+        console.log(allProducts);
     })
     .catch((err) => {
         console.log(err);
