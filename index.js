@@ -15,6 +15,14 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/product/", productRouter);
 
+app.all("*", (req, res, next) => {
+    throw new Error('route not found');
+});
+
+app.use((err, req, res, next) => {
+    console.log(err.message);
+})
+
 app.listen(process.env.PORT, () => {
     console.log(`App running on port ${process.env.PORT}`);
 });
