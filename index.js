@@ -43,7 +43,8 @@ sequelize
     .authenticate()
     .then( async () => {
         console.log("connected to mysql from sequelize");
-        // Product.sync({force:true});
+        const prods = await Product.findAll({include: {model: Purchase, as: "purchases"}});
+        console.log(prods);
         // Purchase.sync({force:true});
     })
     .catch((err) => {
