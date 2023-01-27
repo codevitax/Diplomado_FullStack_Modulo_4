@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const { sequelize, Product } = require("./modelsS")
+const { sequelize, Product, Purchase } = require("./modelsS")
 const productRouter = require("./routers/productRouter");
 const dataSource = require("./dataSource");
 const app = express();
@@ -43,8 +43,8 @@ sequelize
     .authenticate()
     .then( async () => {
         console.log("connected to mysql from sequelize");
-        const prods = await Product.findAll({raw: true});
-        console.log(prods);
+        // Product.sync({force:true});
+        // Purchase.sync({force:true});
     })
     .catch((err) => {
         console.log(err);

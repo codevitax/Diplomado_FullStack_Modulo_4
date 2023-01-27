@@ -5,7 +5,11 @@ const {
 module.exports = (sequelize, DataTypes) => {
     class Product extends Model {
         static associate(models) {
-            
+            Product.hasMany(models.Purchase, {
+                foreignKey: "productId",
+                as: "purchases",
+                onDelete: "RESTRICT"//Por lo general no es CASCADA es RESTRICT 
+            })
         }
     }
     Product.init({
