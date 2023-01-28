@@ -2,6 +2,9 @@ const User = require("../models/User");
 const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const { promisify } = require("util");
+const { Console } = require("console");
+const { decode } = require("punycode");
 
 const login = catchAsync(async (req, res) => {
     let { email, password } = req.body;
@@ -51,8 +54,22 @@ const signup = catchAsync(async (req, res) => {
     });
 });
 
+const protect = catchAsync(async (req, res, next) => {
+    let token;
+    if(req.headers.authorization){
+        token = req.headers.authorization;
+    }else{
+        throw new Error("Please login")
+    }
+    const decoded = promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    req.user = decoded;
+    next();
+
+});
 
 module.exports = {
     login,
-    signup
+    signup,
+    protect
 }
