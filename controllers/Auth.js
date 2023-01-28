@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const login = catchAsync(async (req, res) => {
     let { email, password } = req.body;
@@ -8,9 +9,9 @@ const login = catchAsync(async (req, res) => {
         throw new Error("Please provide email and password")
     }
 
-    const user = await User.findOne({ email }) // es equivalnete a email:email
-
-    if(!user || user.password !== password) {
+    const user = await User.findOne({ email }); // es equivalnete a email:email
+    const hashedPassword = crypto.createHash("sha256").update(password).digest("hex");
+    if(!user || user.password !== hashedPassword) {
         throw new Error("Invalid email or password");
     }
 
@@ -31,7 +32,27 @@ const login = catchAsync(async (req, res) => {
     });
 });
 
+const signup = catchAsync(async (req, res) => {
+    let { email, password, firstName, lastName } = req.body;
+    if(!email || !password || !firstName || !lastName) {
+        throw new Error("Please provide complete information")
+    }
+
+    let user = new User();
+    user.email = email;
+    user.password = crypto.createHash("sha256").update(password).digest("hex");
+    user.firstName = firstName;
+    user.lastName = lastName;
+    await user.save();
+
+    res.status(200).json({
+        status: "ok",
+        message: "User created"
+    });
+});
+
 
 module.exports = {
-    login
+    login,
+    signup
 }
