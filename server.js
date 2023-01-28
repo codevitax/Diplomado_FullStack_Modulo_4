@@ -1,31 +1,9 @@
-const express = require("express");
-const morgan = require("morgan");
 const mongoose = require("mongoose");
 const { sequelize, Product, Purchase } = require("./modelsS")
-const productRouter = require("./routers/productRouter");
 const dataSource = require("./dataSource");
-const app = express();
-app.use(express.json());// req => body
-app.use(morgan('dev'));
+const app = require("./app");
 
-app.use((req, res, next) => {
-    req.requestTime = new Date().toISOString();
-    next();
-});
 
-app.use("/api/v1/product/", productRouter);
-
-app.all("*", (req, res, next) => {
-    throw new Error('route not found');
-});
-
-app.use((err, req, res, next) => {
-    console.log(err.message);
-})
-
-app.listen(process.env.PORT, () => {
-    console.log(`App running on port ${process.env.PORT}`);
-});
 
 mongoose.set('strictQuery', false);
 // MOONGOSE CONNECTION
@@ -51,10 +29,21 @@ sequelize
     .authenticate()
     .then( async () => {
         console.log("connected to mysql from sequelize");
-        const prods = await Product.findAll({include: {model: Purchase, as: "purchases"}});
-        console.log(prods);
+        // const prods = await Product.findAll({include: {model: Purchase, as: "purchases"}});
+        // console.log(prods);
         // Purchase.sync({force:true});
     })
     .catch((err) => {
         console.log(err);
-    })
+    });
+
+process.on("uncaughException", (err) => {
+    console.log("uncaughException", err);
+    console.log("shutting down");
+    process.exit(1);
+});
+
+    app.listen(process.env.PORT, () => {
+        console.log(`App running on port ${process.env.PORT}`);
+    });
+    
