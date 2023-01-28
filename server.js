@@ -3,6 +3,11 @@ const { sequelize, Product, Purchase } = require("./modelsS")
 const dataSource = require("./dataSource");
 const app = require("./app");
 
+process.on("uncaughtException", (err) => {
+    console.log("uncaughtException", err);
+    console.log("shutting down");
+    process.exit(1);
+})
 
 
 mongoose.set('strictQuery', false);
@@ -37,13 +42,17 @@ sequelize
         console.log(err);
     });
 
-process.on("uncaughException", (err) => {
-    console.log("uncaughException", err);
-    console.log("shutting down");
-    process.exit(1);
-});
 
-    app.listen(process.env.PORT, () => {
+    const server = app.listen(process.env.PORT, () => {
         console.log(`App running on port ${process.env.PORT}`);
     });
+
+    process.on("unhandledRejection", (err) => {
+        console.log("unhandledRejection", err);
+        console.log("shutting down");
+        server.close(() => {
+            process.exit(1);
+        })
+    });
+    
     
