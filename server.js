@@ -19,28 +19,28 @@ mongoose.connect(process.env.DB_URL, {}).then(async (con) => {
 })
 // TYPEORM CONNECTION
 
-dataSource
-    .initialize()
-    .then( async () => {
-        console.log("connected to mysql from typeorm");
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+// dataSource
+//     .initialize()
+//     .then( async () => {
+//         console.log("connected to mysql from typeorm");
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 
 
 //SEQUELIZE CONNECTION
-sequelize
-    .authenticate()
-    .then( async () => {
-        console.log("connected to mysql from sequelize");
+// sequelize
+//     .authenticate()
+//     .then( async () => {
+//         console.log("connected to mysql from sequelize");
         // const prods = await Product.findAll({include: {model: Purchase, as: "purchases"}});
         // console.log(prods);
         // Purchase.sync({force:true});
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+    // })
+    // .catch((err) => {
+    //     console.log(err);
+    // });
 
 
     const server = app.listen(process.env.PORT, () => {
