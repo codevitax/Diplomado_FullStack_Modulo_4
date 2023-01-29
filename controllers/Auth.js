@@ -35,7 +35,7 @@ const login = catchAsync(async (req, res) => {
     });
 });
 
-const signup = catchAsync(async (req, res) => {
+const register = catchAsync(async (req, res) => {
     let { email, password, firstName, lastName } = req.body;
     if(!email || !password || !firstName || !lastName) {
         throw new Error("Please provide complete information")
@@ -70,6 +70,6 @@ const protect = catchAsync(async (req, res, next) => {
 
 module.exports = {
     login,
-    signup,
+    register,
     protect
 }

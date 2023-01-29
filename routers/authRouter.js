@@ -1,12 +1,12 @@
 const express = require("express");
 const authRouter = express.Router();// esta funcion es para crear un router en express
-const { login, signup } = require("../controllers/Auth");
+const { login, register } = require("../controllers/Auth");
 
 authRouter
     .route("/login")
     .post(login);
 
 authRouter
-    .route("/signup")
-    .post(signup);
+    .route("/register")
+    .post(register);
 module.exports = authRouter;
