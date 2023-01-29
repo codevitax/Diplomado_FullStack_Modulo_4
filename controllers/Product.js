@@ -24,7 +24,7 @@ const addProduct = catchAsync(async (req, res) => {
 });
 
 const getProductByID = catchAsync(async (req, res) => {
-    const productByID = await Product.findOne(req.body.id);
+    const productByID = await Product.findById(req.body.id);
     res.status(200).json({
         status: "ok",
         data: productByID
